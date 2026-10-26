@@ -47,7 +47,7 @@ async function run(reroll){const text=msg.value.trim();if(!text)return toast('�
  if(!reroll&&used()>=LIMIT){out.innerHTML='<div class="card warn">今天 5 次免费额度用完了 🙈 明天再来，或者 <a href="#vip" style="color:#ff8fa3">加入会员候补</a>。</div>';return}
  const opts={platform:plat.value,stage:stage.value,context:ctx.value,reroll};let r;
  if(window.TH_API){try{r=await (await fetch(TH_API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text,...opts})})).json()}catch(e){}}
- r=r||TH.analyze(text+' '+(ctx.value||''),opts);if(!reroll)inc();showLeft();
+ r=r||TH.analyze(text+' '+(ctx.value||''),opts);if(!reroll&&!r.blocked)inc();showLeft();
  if(r.blocked){out.innerHTML=`<div class="card warn"><h3>⛔ 这条我们不帮</h3><p>${esc(r.msg)}</p></div>`;return}
  const reps=[['主选',r.main],...r.alts.map((a,i)=>['备选'+(i+1),a])];
  out.innerHTML=`<div class="card"><h3>1️⃣ 可复制回复</h3>${reps.map(([k,v])=>`<div class="rep"><span><span class="tag">${k}</span>${esc(v)}</span><button class="g" data-t="${esc(v)}">复制</button></div>`).join('')}
